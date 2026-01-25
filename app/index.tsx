@@ -103,7 +103,10 @@ export default function Home() {
         <SafeAreaView style={styles.container}>
             <StatusBar style="light" />
             <View style={styles.header}>
-                <Text style={styles.title}>Dictionary</Text>
+                <Text style={styles.title}>The Gentry</Text>
+                <TouchableOpacity onPress={() => router.push('/history')} style={{ padding: 8 }}>
+                    <Ionicons name="time-outline" size={28} color={Colors.dark.primary} />
+                </TouchableOpacity>
             </View>
 
             <View style={styles.searchContainer}>
@@ -135,25 +138,9 @@ export default function Home() {
                         }
                     />
                 ) : (
-                    <View style={{ flex: 1 }}>
-                        <View style={styles.sectionHeader}>
-                            <Text style={styles.sectionTitle}>Recent Searches</Text>
-                            {/* <TouchableOpacity onPress={() => router.push('/history')}>
-                    <Text style={styles.seeAll}>See All</Text>
-                </TouchableOpacity> */}
-                        </View>
-                        <FlatList
-                            data={history}
-                            keyExtractor={(item) => item.id.toString()}
-                            renderItem={renderHistoryItem}
-                            contentContainerStyle={styles.listContent}
-                            ListEmptyComponent={
-                                <View style={styles.emptyState}>
-                                    <Ionicons name="book-outline" size={48} color={Colors.dark.surfaceLight} />
-                                    <Text style={styles.emptyText}>Start searching to build your dictionary.</Text>
-                                </View>
-                            }
-                        />
+                    <View style={styles.emptyState}>
+                        <Ionicons name="book-outline" size={80} color={Colors.dark.surfaceLight} />
+                        <Text style={styles.emptyText}>Start searching to build your dictionary.</Text>
                     </View>
                 )}
             </View>
@@ -170,6 +157,9 @@ const styles = StyleSheet.create({
     header: {
         paddingHorizontal: 20,
         paddingVertical: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     title: {
         fontSize: 32,

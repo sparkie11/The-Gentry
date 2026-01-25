@@ -122,11 +122,22 @@ export const searchWord = async (term: string) => {
 };
 
 export const addToHistory = async (term: string) => {
-    const db = await getDb();
     const timestamp = Date.now();
-    // Check if exists today to avoid duplicates on same day? Or just add all?
-    // User asked: "store the searched term , on date basis in local"
-    // Let's just store all for now.
+
+    if (Platform.OS === 'web') {
+        try {
+            const raw = localStorage.getItem('history');
+            const history = raw ? JSON.parse(raw) : [];
+            // Add new item
+            history.push({ id: timestamp, term, timestamp }); // Use timestamp as simple ID
+            localStorage.setItem('history', JSON.stringify(history));
+        } catch (e) {
+            console.warn("Failed to save history to localStorage:", e);
+        }
+        return;
+    }
+
+    const db = await getDb();
     await db.runAsync(
         'INSERT INTO history (term, timestamp) VALUES (?, ?)',
         [term, timestamp]
@@ -134,16 +145,31 @@ export const addToHistory = async (term: string) => {
 };
 
 export const getHistory = async () => {
+    if (Platform.OS === 'web') {
+        try {
+            const raw = localStorage.getItem('history');
+            // Sort by timestamp ASC
+            const history = raw ? JSON.parse(raw) : [];
+            return history.sort((a: any, b: any) => a.timestamp - b.timestamp);
+        } catch (e) {
+            console.warn("Failed to read history from localStorage:", e);
+            return [];
+        }
+    }
+
     const db = await getDb();
-    // Group by date might be done in UI or here.
-    // Let's get raw data first.
+    // User requested "first searched word should appear first" -> Oldest first (ASC)
     const result = await db.getAllAsync(
-        'SELECT * FROM history ORDER BY timestamp DESC LIMIT 100'
+        'SELECT * FROM history ORDER BY timestamp ASC LIMIT 100'
     );
     return result;
 };
 
 export const clearHistory = async () => {
+    if (Platform.OS === 'web') {
+        localStorage.removeItem('history');
+        return;
+    }
     const db = await getDb();
     await db.runAsync('DELETE FROM history');
 }
