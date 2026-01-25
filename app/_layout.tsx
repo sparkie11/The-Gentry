@@ -1,24 +1,75 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect, useState } from 'react';
+import { ActivityIndicator, Text, View } from 'react-native';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Colors } from '../src/constants/Colors';
+import { initDatabase } from '../src/services/db';
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+// Prevent the splash screen from auto-hiding before asset loading is complete.
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
+  const [dbReady, setDbReady] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [loaded] = useFonts({});
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+        await initDatabase();
+        setDbReady(true);
+      } catch (e: any) {
+        console.warn(e);
+        setError(`Failed to load dictionary database: ${e.message || e}`);
+      } finally {
+        if (loaded) {
+          await SplashScreen.hideAsync();
+        }
+      }
+    }
+
+    if (loaded) {
+      prepare();
+    }
+  }, [loaded]);
+
+  if (!loaded || !dbReady) {
+    if (error) {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.dark.background }}>
+          <Text style={{ color: Colors.dark.error, textAlign: 'center', padding: 20 }}>{error}</Text>
+        </View>
+      )
+    }
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: Colors.dark.background }}>
+        <ActivityIndicator size="large" color={Colors.dark.primary} />
+      </View>
+    );
+  }
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: Colors.dark.background,
+        },
+        headerTintColor: Colors.dark.text,
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+        contentStyle: {
+          backgroundColor: Colors.dark.background
+        }
+      }}
+    >
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="details/[word]" options={{ presentation: 'modal', title: 'Definition' }} />
+      <Stack.Screen name="history" options={{ title: 'History' }} />
+    </Stack>
   );
 }
