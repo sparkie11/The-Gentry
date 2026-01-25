@@ -104,9 +104,14 @@ export default function Home() {
             <StatusBar style="light" />
             <View style={styles.header}>
                 <Text style={styles.title}>The Gentry</Text>
-                <TouchableOpacity onPress={() => router.push('/history')} style={{ padding: 8 }}>
-                    <Ionicons name="time-outline" size={28} color={Colors.dark.primary} />
-                </TouchableOpacity>
+                <View style={{ flexDirection: 'row' }}>
+                    <TouchableOpacity onPress={() => router.push('/history')} style={{ padding: 8, marginRight: 5 }}>
+                        <Ionicons name="time-outline" size={28} color={Colors.dark.primary} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => router.push('/settings')} style={{ padding: 8 }}>
+                        <Ionicons name="settings-outline" size={28} color={Colors.dark.textSecondary} />
+                    </TouchableOpacity>
+                </View>
             </View>
 
             <View style={styles.searchContainer}>

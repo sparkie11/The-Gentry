@@ -70,6 +70,9 @@ export default function RootLayout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="details/[word]" options={{ presentation: 'modal', title: 'Definition' }} />
       <Stack.Screen name="history" options={{ title: 'History' }} />
+      <Stack.Screen name="settings" options={{ title: 'Settings', presentation: 'modal' }} />
+      <Stack.Screen name="privacy" options={{ title: 'Privacy Policy' }} />
+      <Stack.Screen name="terms" options={{ title: 'Terms & Conditions' }} />
     </Stack>
   );
 }
