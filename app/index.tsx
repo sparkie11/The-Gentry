@@ -2,13 +2,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useEffect, useState } from 'react';
-import { FlatList, Platform, StatusBar as RNStatusBar, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Platform, StatusBar as RNStatusBar, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../src/constants/Colors';
 import { addToHistory, getHistory, searchWord } from '../src/services/db';
 
 // Debounce helper
 function debounce(func: Function, wait: number) {
-    let timeout: NodeJS.Timeout;
+    let timeout: any;
     return function (...args: any[]) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func(...args), wait);
@@ -103,7 +103,13 @@ export default function Home() {
         <SafeAreaView style={styles.container}>
             <StatusBar style="light" />
             <View style={styles.header}>
-                <Text style={styles.title}>The Gentry</Text>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Image
+                        source={require('../assets/images/logo.png')}
+                        style={{ width: 70, height: 70, marginRight: 8, borderRadius: 12 }}
+                    />
+                    <Text style={styles.title}>The Gentry</Text>
+                </View>
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity onPress={() => router.push('/history')} style={{ padding: 8, marginRight: 5 }}>
                         <Ionicons name="time-outline" size={28} color={Colors.dark.primary} />
