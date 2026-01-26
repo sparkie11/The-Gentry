@@ -106,7 +106,8 @@ export default function Home() {
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <Image
                         source={require('../assets/images/logo.png')}
-                        style={{ width: 70, height: 70, marginRight: 8, borderRadius: 12 }}
+                        style={{ width: 100, height: 100, marginRight: -16,marginTop:5 }}
+                        resizeMode="contain"
                     />
                     <Text style={styles.title}>The Gentry</Text>
                 </View>
@@ -177,6 +178,7 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: Colors.dark.text,
         letterSpacing: -1,
+        marginTop:-6
     },
     searchContainer: {
         flexDirection: 'row',
