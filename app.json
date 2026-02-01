@@ -2,7 +2,7 @@
   "expo": {
     "name": "The-Gentry",
     "slug": "The-Gentry",
-    "version": "1.0.0",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "dictionary",
@@ -10,7 +10,8 @@
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sparkiewise.thegentry"
+      "bundleIdentifier": "com.sparkiewise.thegentry",
+      "buildNumber": "2"
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +22,8 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.sparkiewise.thegentry"
+      "package": "com.sparkiewise.thegentry",
+      "versionCode": 2
     },
     "web": {
       "output": "static",
